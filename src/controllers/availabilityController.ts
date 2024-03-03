@@ -33,12 +33,15 @@ export const getAvailability = catchAsync(
     // Get ID Of Registered Mentor
     const { mentorID } = (req as any).body
 
-    await Availability.findOne({ mentorID: mentorID })
+    await Availability.findOne(
+      { mentorID: mentorID },
+      { availability: 1, sessionPrice: 1, _id: 0 }
+    )
       .lean()
       .exec()
       .then((doc) =>
         doc
-          ? res.status(200).json({ status: 'success', data: doc.availability })
+          ? res.status(200).json({ status: 'success', data: doc })
           : res.status(404).json({
               code: 404,
               message: "The mentor doesn't have time slots available yet!"

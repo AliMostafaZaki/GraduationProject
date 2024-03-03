@@ -121,15 +121,11 @@ export const paymobCheckoutSession = catchAsync(
 
 export const paymobWebhookCheckout = catchAsync(
   async (req: Request, res: Response) => {
-    console.log('Check out paymob webhook !')
-
     // Object From Returned POST Request From Paymob Server
     const bufferData = req.body // Paymob return body that contain obj as buffer
     const stringData = bufferData.toString('utf-8') // Convert Buffer to string using appropriate encoding (utf-8 in this case)
     const parsedData = JSON.parse(stringData) // Parse the JSON string back to a JavaScript object
     const object = parsedData.obj // Parse the string as JSON
-
-    console.log('object... ' + object)
 
     if (object.success) {
       // Session Data from Paymob Req
@@ -145,7 +141,9 @@ export const paymobWebhookCheckout = catchAsync(
         timeslot: details[3],
         price: object.amount_cents / 100
       })
+      res.status(200).json({ received: true })
+    } else {
+      res.status(404).json({ received: false })
     }
-    res.status(200).json({ received: true })
   }
 )

@@ -34,11 +34,11 @@ exports.setAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(v
 exports.getAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Get ID Of Registered Mentor
     const { mentorID } = req.body;
-    yield availabilityModel_1.default.findOne({ mentorID: mentorID })
+    yield availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 })
         .lean()
         .exec()
         .then((doc) => doc
-        ? res.status(200).json({ status: 'success', data: doc.availability })
+        ? res.status(200).json({ status: 'success', data: doc })
         : res.status(404).json({
             code: 404,
             message: "The mentor doesn't have time slots available yet!"

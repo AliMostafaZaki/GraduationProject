@@ -111,13 +111,11 @@ exports.paymobCheckoutSession = (0, catchAsync_js_1.default)((req, res, next) =>
     });
 }));
 exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Check out paymob webhook !');
     // Object From Returned POST Request From Paymob Server
     const bufferData = req.body; // Paymob return body that contain obj as buffer
     const stringData = bufferData.toString('utf-8'); // Convert Buffer to string using appropriate encoding (utf-8 in this case)
     const parsedData = JSON.parse(stringData); // Parse the JSON string back to a JavaScript object
     const object = parsedData.obj; // Parse the string as JSON
-    console.log('object... ' + object);
     if (object.success) {
         // Session Data from Paymob Req
         const details = object.order.items[0].name.split('#');
@@ -131,6 +129,9 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)((req, res) => __awa
             timeslot: details[3],
             price: object.amount_cents / 100
         });
+        res.status(200).json({ received: true });
     }
-    res.status(200).json({ received: true });
+    else {
+        res.status(404).json({ received: false });
+    }
 }));

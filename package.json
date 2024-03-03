@@ -5,17 +5,16 @@
   "main": "app.js",
   "scripts": {
     "watch": "tsc -w",
-    "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix",
     "start:dev": "nodemon dist/server.js",
     "start": "NODE_ENV=production node dist/server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "Ali Zaki",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -29,11 +28,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
     "morgan": "^1.10.0",
-    "multer": "^1.4.4",
-    "nodemailer": "^6.7.2",
     "sharp": "^0.29.3",
     "slugify": "^1.6.3",
-    "stripe": "^8.212.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
