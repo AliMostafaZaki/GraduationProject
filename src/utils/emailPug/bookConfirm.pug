@@ -1,0 +1,22 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p Session Booked Successflly 🎉🙏
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    thead
+      tr
+        th Name
+        th Email
+        th Day
+        th Time Slot
+        th Price
+    tbody
+      tr
+        td(align='left') ${name}
+        td(align='left') ${email}
+        td(align='left') ${day}
+        td(align='left') ${timeslot}
+        td(align='left') ${price}
+  p If you need any help, please don't hesitate to contact me!
+  p - Ali Zaki, CEO

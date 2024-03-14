@@ -3,6 +3,7 @@ import Availability from '../models/availabilityModel'
 import { NextFunction, Request, Response } from 'express' // Import types for request and response objects
 import catchAsync from '../utils/catchAsync.js' // Import catchAsync function
 import AppError from '../utils/appError'
+const Email = require('../utils/email')
 
 export const getBookings = catchAsync(async (req: Request, res: Response) => {
   // Get ID Of Registered Mentor
@@ -141,6 +142,27 @@ export const paymobWebhookCheckout = catchAsync(
         timeslot: details[3],
         price: object.amount_cents / 100
       })
+
+      // Send Email To Mentor
+      const mentorMail = {
+        name: details[0],
+        email: details[4],
+        day: details[2],
+        timeslot: details[3],
+        price: object.amount_cents / 100
+      }
+      await new Email(mentorMail).sendBookConfirm()
+
+      // Send Email To Mentee
+      const menteeMail = {
+        name: details[1],
+        email: details[5],
+        day: details[2],
+        timeslot: details[3],
+        price: object.amount_cents / 100
+      }
+      await new Email(menteeMail).sendBookConfirm()
+
       res.status(200).json({ received: true })
     } else {
       res.status(404).json({ received: false })

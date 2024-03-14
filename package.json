@@ -30,7 +30,11 @@
     "morgan": "^1.10.0",
     "sharp": "^0.29.3",
     "slugify": "^1.6.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "pug": "^3.0.2",
+    "nodemailer-sendgrid": "^1.0.3",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "html-to-text": "^9.0.5"
   },
   "devDependencies": {
     "@types/compression": "^1.7.5",
