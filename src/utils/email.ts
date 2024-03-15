@@ -3,15 +3,16 @@ import sendgridTransport from 'nodemailer-sendgrid-transport'
 import pug from 'pug'
 import { htmlToText } from 'html-to-text'
 
-module.exports = class Email {
+class Email {
   constructor(book) {
-    this.firstName = book.name.split(' ')[0]
+    this.firstName = book.name ? book.name.split(' ')[0] : ''
     this.email = book.email
     this.day = book.day
     this.timeslot = book.timeslot
     this.price = book.price
     this.to = book.email
     this.from = `Mentor Team <${process.env.EMAIL_FROM}>`
+    this.url = book.url
   }
 
   newTransport() {
@@ -37,7 +38,7 @@ module.exports = class Email {
   }
 
   async send(template, subject) {
-    const html = pug.renderFile(`${__dirname}/../emailPug/${template}.pug`, {
+    const html = pug.renderFile(`${__dirname}/emailPug/${template}.pug`, {
       firstName: this.firstName,
       name: this.firstName,
       email: this.email,
@@ -63,9 +64,21 @@ module.exports = class Email {
   }
 
   async sendSessionReminder() {
-    await this.send(
-      'sessionReminder',
-      'Your Session Will Start in 1 Hour! See Link Below!'
-    )
+    const html = pug.renderFile(`${__dirname}/emailPug/sessionReminder.pug`, {
+      url: this.url,
+      subject: 'Your Session Will Start in 1 Hour! See Link Below!'
+    })
+
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject: 'Your Session Will Start in 1 Hour! See Link Below!',
+      html,
+      text: htmlToText(html)
+    }
+
+    await this.newTransport().sendMail(mailOptions)
   }
 }
+
+export default Email

@@ -13,10 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymobWebhookCheckout = exports.paymobCheckoutSession = exports.getBookings = void 0;
+const node_cron_1 = __importDefault(require("node-cron"));
 const bookingModel_1 = __importDefault(require("../models/bookingModel"));
 const availabilityModel_1 = __importDefault(require("../models/availabilityModel"));
 const catchAsync_js_1 = __importDefault(require("../utils/catchAsync.js")); // Import catchAsync function
 const appError_1 = __importDefault(require("../utils/appError"));
+const email_1 = __importDefault(require("../utils/email"));
 exports.getBookings = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Get ID Of Registered Mentor
     const { userID } = req.body;
@@ -129,6 +131,41 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)((req, res) => __awa
             timeslot: details[3],
             price: object.amount_cents / 100
         });
+        // Send Email To Mentor
+        const mentorMail = {
+            name: details[0],
+            email: details[4],
+            day: details[2],
+            timeslot: details[3],
+            price: object.amount_cents / 100
+        };
+        yield new email_1.default(mentorMail).sendBookConfirm();
+        // Send Email To Mentee
+        const menteeMail = {
+            name: details[1],
+            email: details[5],
+            day: details[2],
+            timeslot: details[3],
+            price: object.amount_cents / 100
+        };
+        yield new email_1.default(menteeMail).sendBookConfirm();
+        // Get Session Link From Nagy
+        // Send Reminder Email
+        const reminderMentor = {
+            url: 'https://www.google.com/',
+            email: details[4]
+        };
+        const reminderMentee = {
+            url: 'https://www.google.com/',
+            email: details[5]
+        };
+        // Extracting date and time
+        const [, month, day] = details[2].split('-');
+        const [hour, minute] = details[3].split(':');
+        node_cron_1.default.schedule(`${minute} ${hour - 1} ${day} ${month} *`, () => __awaiter(void 0, void 0, void 0, function* () {
+            yield new email_1.default(reminderMentor).sendSessionReminder();
+            yield new email_1.default(reminderMentee).sendSessionReminder();
+        }));
         res.status(200).json({ received: true });
     }
     else {

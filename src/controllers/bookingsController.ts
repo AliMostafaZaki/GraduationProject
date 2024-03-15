@@ -1,9 +1,10 @@
+import cron from 'node-cron'
 import Bookings from '../models/bookingModel'
 import Availability from '../models/availabilityModel'
 import { NextFunction, Request, Response } from 'express' // Import types for request and response objects
 import catchAsync from '../utils/catchAsync.js' // Import catchAsync function
 import AppError from '../utils/appError'
-const Email = require('../utils/email')
+import Email from '../utils/email'
 
 export const getBookings = catchAsync(async (req: Request, res: Response) => {
   // Get ID Of Registered Mentor
@@ -162,6 +163,27 @@ export const paymobWebhookCheckout = catchAsync(
         price: object.amount_cents / 100
       }
       await new Email(menteeMail).sendBookConfirm()
+
+      // Get Session Link From Nagy
+
+      // Send Reminder Email
+      const reminderMentor = {
+        url: 'https://www.google.com/',
+        email: details[4]
+      }
+      const reminderMentee = {
+        url: 'https://www.google.com/',
+        email: details[5]
+      }
+
+      // Extracting date and time
+      const [, month, day] = details[2].split('-')
+      const [hour, minute] = details[3].split(':')
+
+      cron.schedule(`${minute} ${hour - 1} ${day} ${month} *`, async () => {
+        await new Email(reminderMentor).sendSessionReminder()
+        await new Email(reminderMentee).sendSessionReminder()
+      })
 
       res.status(200).json({ received: true })
     } else {
