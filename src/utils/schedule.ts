@@ -9,6 +9,7 @@ let activeJob = false
 export default async function populateQueue() {
   while ((await Queue.countDocuments()) < 10) {
     const booking = await Bookings.findOne({}, { sort: { meetingTime: 1 } })
+    console.log(booking)
     if (booking && lessThanADayAway(booking.meetingTime)) {
       await enqueue(booking)
       await Bookings.deleteOne({ _id: booking._id })
