@@ -133,8 +133,9 @@ export const paymobWebhookCheckout = catchAsync(
     if (object.success) {
       // Session Data from Paymob Req
       const details = object.order.items[0].name.split('#')
-      // mentorEmail: details[4]
-      // menteeEmail: details[5]
+
+      const tempDate = new Date(`${details[2]} ${details[3]}`)
+      tempDate.setHours(tempDate.getHours() - 1)
 
       // Create Booking
       await Bookings.create({
@@ -142,8 +143,10 @@ export const paymobWebhookCheckout = catchAsync(
         menteeID: details[1],
         day: details[2],
         timeslot: details[3],
-        meetingTime: new Date(`${details[2]} ${details[3]}`),
-        price: object.amount_cents / 100
+        meetingTime: tempDate,
+        price: object.amount_cents / 100,
+        mentorEmail: details[4],
+        menteeEmail: details[5]
       })
 
       // Send Email To Mentor
@@ -169,29 +172,7 @@ export const paymobWebhookCheckout = catchAsync(
       // Stand at Queue
       Schedule()
 
-      ///////////////////////////////////////////////////////////////////
-      // Get Session Link From Nagy
-
-      // Send Reminder Email
-      // const reminderMentor = {
-      //   url: 'https://www.google.com/',
-      //   email: details[4]
-      // }
-      // const reminderMentee = {
-      //   url: 'https://www.google.com/',
-      //   email: details[5]
-      // }
-
-      // Extracting date and time
-      // const [, month, day] = details[2].split('-')
-      // const [hour, minute] = details[3].split(':')
-
-      // cron.schedule(`${minute} ${hour - 1} ${day} ${month} *`, async () => {
-      //   await new Email(reminderMentor).sendSessionReminder()
-      //   await new Email(reminderMentee).sendSessionReminder()
-      // })
-
-      ///////////////////////////////////////////////////////////////////
+      // Call Confirm Notification Endpoint
 
       res.status(200).json({ received: true })
     } else {

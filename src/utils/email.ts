@@ -69,6 +69,8 @@ class Email {
       subject: 'Your Session Will Start in 1 Hour! See Link Below!'
     })
 
+    console.log(this)
+
     const mailOptions = {
       from: this.from,
       to: this.to,

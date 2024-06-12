@@ -27,7 +27,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const bookingSchema = new mongoose_1.Schema({
     mentorID: {
         type: String,
-        required: [true, 'Booking Must Belong To Mentor!']
+        required: [true, 'Booking Must Have Email!']
     },
     menteeID: {
         type: String,
@@ -60,6 +60,14 @@ const bookingSchema = new mongoose_1.Schema({
     price: {
         type: String,
         required: true
+    },
+    mentorEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentor Email!']
+    },
+    menteeEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentee Email!']
     }
     // isPaid: {
     //   type: Boolean,

@@ -24,7 +24,10 @@ app.set('view engine', 'pug');
 app.set('views', path_1.default.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5500',
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
+}));
 app.options('*', (0, cors_1.default)());
 // Serving static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));

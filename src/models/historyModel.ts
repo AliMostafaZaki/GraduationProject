@@ -37,6 +37,14 @@ const historySchema = new Schema(
     price: {
       type: String,
       required: true
+    },
+    mentorEmail: {
+      type: String,
+      required: [true, 'Booking Must Have Mentor Email!']
+    },
+    menteeEmail: {
+      type: String,
+      required: [true, 'Booking Must Have Mentee Email!']
     }
   },
   { timestamps: true }

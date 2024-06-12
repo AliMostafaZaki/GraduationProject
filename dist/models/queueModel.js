@@ -59,6 +59,14 @@ const queueSchema = new mongoose_1.Schema({
     price: {
         type: String,
         required: true
+    },
+    mentorEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentor Email!']
+    },
+    menteeEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentee Email!']
     }
 }, { timestamps: true });
 const Queue = mongoose_1.default.model('Queue', queueSchema);

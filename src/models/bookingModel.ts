@@ -4,7 +4,7 @@ const bookingSchema = new Schema(
   {
     mentorID: {
       type: String,
-      required: [true, 'Booking Must Belong To Mentor!']
+      required: [true, 'Booking Must Have Email!']
     },
     menteeID: {
       type: String,
@@ -38,6 +38,14 @@ const bookingSchema = new Schema(
     price: {
       type: String,
       required: true
+    },
+    mentorEmail: {
+      type: String,
+      required: [true, 'Booking Must Have Mentor Email!']
+    },
+    menteeEmail: {
+      type: String,
+      required: [true, 'Booking Must Have Mentee Email!']
     }
     // isPaid: {
     //   type: Boolean,

@@ -59,6 +59,14 @@ const historySchema = new mongoose_1.Schema({
     price: {
         type: String,
         required: true
+    },
+    mentorEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentor Email!']
+    },
+    menteeEmail: {
+        type: String,
+        required: [true, 'Booking Must Have Mentee Email!']
     }
 }, { timestamps: true });
 const History = mongoose_1.default.model('History', historySchema);
