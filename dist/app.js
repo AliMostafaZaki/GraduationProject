@@ -42,11 +42,7 @@ if (process.env.NODE_ENV === 'development') {
 // })
 // app.use('/api', limiter)
 // PAYMOB Checkout webhook
-app.post('/paymob-webhook', express_1.default.raw({ type: '*/*' }), (req, res, next) => {
-    console.log('Headers:', req.headers);
-    console.log('Body:', req.body.toString());
-    next();
-}, bookingsController_1.paymobWebhookCheckout);
+app.post('/paymob-webhook', express_1.default.raw({ type: 'application/json' }), bookingsController_1.paymobWebhookCheckout);
 // Body parser, reading data from body into req.body
 app.use(express_1.default.json({ limit: '10kb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10kb' }));
