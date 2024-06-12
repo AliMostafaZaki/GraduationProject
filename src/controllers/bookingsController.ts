@@ -136,21 +136,15 @@ export const paymobWebhookCheckout = catchAsync(
       // mentorEmail: details[4]
       // menteeEmail: details[5]
 
-      // Calculate Meeting Time
-      const meetingDate = new Date(`${details[2]} ${details[3]}`)
-      console.log('Hi 1' + meetingDate)
-
       // Create Booking
-      const temp = await Bookings.create({
+      await Bookings.create({
         mentorID: details[0],
         menteeID: details[1],
         day: details[2],
         timeslot: details[3],
-        meetingTime: meetingDate,
+        meetingTime: new Date(`${details[2]} ${details[3]}`),
         price: object.amount_cents / 100
       })
-
-      console.log('Hi 2' + temp)
 
       // Send Email To Mentor
       const mentorMail = {

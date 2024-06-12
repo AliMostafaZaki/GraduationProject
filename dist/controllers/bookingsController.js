@@ -114,19 +114,15 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)(async (req, res) =>
         const details = object.order.items[0].name.split('#');
         // mentorEmail: details[4]
         // menteeEmail: details[5]
-        // Calculate Meeting Time
-        const meetingDate = new Date(`${details[2]} ${details[3]}`);
-        console.log('Hi 1' + meetingDate);
         // Create Booking
-        const temp = await bookingModel_1.default.create({
+        await bookingModel_1.default.create({
             mentorID: details[0],
             menteeID: details[1],
             day: details[2],
             timeslot: details[3],
-            meetingTime: meetingDate,
+            meetingTime: new Date(`${details[2]} ${details[3]}`),
             price: object.amount_cents / 100
         });
-        console.log('Hi 2' + temp);
         // Send Email To Mentor
         const mentorMail = {
             name: details[0],
