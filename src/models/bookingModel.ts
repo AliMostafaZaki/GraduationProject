@@ -31,6 +31,10 @@ const bookingSchema = new Schema(
           `${props.value} is not a valid time slot. Time slot should be in "HH:MM" format.`
       }
     },
+    meetingTime: {
+      type: Date,
+      required: [true, 'Booking must have a meeting time!']
+    },
     price: {
       type: String,
       required: true
@@ -48,6 +52,10 @@ const bookingSchema = new Schema(
   },
   { timestamps: true }
 )
+
+const Booking = mongoose.model('Booking', bookingSchema)
+
+export default Booking
 
 // userSchema.pre('save', async function (next) {
 //   if (!this.isModified('password')) return next()
@@ -98,7 +106,3 @@ const bookingSchema = new Schema(
 
 //   return resetToken
 // }
-
-const Booking = mongoose.model('Booking', bookingSchema)
-
-export default Booking

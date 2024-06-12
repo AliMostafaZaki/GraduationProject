@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,25 +7,25 @@ exports.checkAvailability = exports.getAvailability = exports.setAvailability = 
 const availabilityModel_1 = __importDefault(require("../models/availabilityModel"));
 const bookingModel_1 = __importDefault(require("../models/bookingModel"));
 const catchAsync_js_1 = __importDefault(require("../utils/catchAsync.js")); // Import catchAsync function
-exports.setAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.setAvailability = (0, catchAsync_js_1.default)(async (req, res) => {
     // Get ID Of Registered Mentor
     const { mentorID } = req.body;
     // Check If Mentor Has Availability Slots Or Not
-    const exist = yield availabilityModel_1.default.findOne({ mentorID: mentorID });
+    const exist = await availabilityModel_1.default.findOne({ mentorID: mentorID });
     // If Mentor Has Not Availability Slots Then Create New One
     if (!exist)
-        yield availabilityModel_1.default.create({ mentorID: mentorID });
+        await availabilityModel_1.default.create({ mentorID: mentorID });
     // Update Availability Slots
     const { availability, sessionPrice } = req.body;
-    yield availabilityModel_1.default.findOneAndUpdate({ mentorID: mentorID }, { availability: availability, sessionPrice: sessionPrice }, { runValidators: true });
+    await availabilityModel_1.default.findOneAndUpdate({ mentorID: mentorID }, { availability: availability, sessionPrice: sessionPrice }, { runValidators: true });
     res.status(200).json({
         status: 'success'
     });
-}));
-exports.getAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.getAvailability = (0, catchAsync_js_1.default)(async (req, res) => {
     // Get ID Of Registered Mentor
     const { mentorID } = req.body;
-    yield availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 })
+    await availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 })
         .lean()
         .exec()
         .then((doc) => doc
@@ -43,17 +34,17 @@ exports.getAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(v
             code: 404,
             message: "The mentor doesn't have time slots available yet!"
         }));
-}));
-exports.checkAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.checkAvailability = (0, catchAsync_js_1.default)(async (req, res) => {
     var _a;
     // Get ID Of Mentor
     const { mentorID } = req.body;
     // Get Mentor Availability
-    const { availability, sessionPrice } = yield availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 }).lean();
+    const { availability, sessionPrice } = await availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 }).lean();
     // Get Mentor Bookings
     const now = new Date();
     const nowDay = now.toISOString().split('T')[0];
-    const bookings = yield bookingModel_1.default.find({ mentorID: mentorID, day: { $gt: nowDay } }, { day: 1, timeslot: 1, _id: 0 }).lean();
+    const bookings = await bookingModel_1.default.find({ mentorID: mentorID, day: { $gt: nowDay } }, { day: 1, timeslot: 1, _id: 0 }).lean();
     const availableDates = [];
     const nextDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     // Generate the next 4 weeks dates starting from the next day
@@ -78,7 +69,7 @@ exports.checkAvailability = (0, catchAsync_js_1.default)((req, res) => __awaiter
         status: 'success',
         data: { availableDates: availableDates, sessionPrice: sessionPrice }
     });
-}));
+});
 // FOR REFACTOR
 /*
 const moment = require('moment');

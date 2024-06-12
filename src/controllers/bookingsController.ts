@@ -1,10 +1,11 @@
-import cron from 'node-cron'
+// import cron from 'node-cron'
 import Bookings from '../models/bookingModel'
 import Availability from '../models/availabilityModel'
 import { NextFunction, Request, Response } from 'express' // Import types for request and response objects
 import catchAsync from '../utils/catchAsync.js' // Import catchAsync function
 import AppError from '../utils/appError'
 import Email from '../utils/email'
+import populateQueue from '../utils/schedule'
 
 export const getBookings = catchAsync(async (req: Request, res: Response) => {
   // Get ID Of Registered Mentor
@@ -135,14 +136,21 @@ export const paymobWebhookCheckout = catchAsync(
       // mentorEmail: details[4]
       // menteeEmail: details[5]
 
+      // Calculate Meeting Time
+      const meetingDate = new Date(`${details[2]} ${details[3]}`)
+      console.log('Hi 1' + meetingDate)
+
       // Create Booking
-      await Bookings.create({
+      const temp = await Bookings.create({
         mentorID: details[0],
         menteeID: details[1],
         day: details[2],
         timeslot: details[3],
+        meetingTime: meetingDate,
         price: object.amount_cents / 100
       })
+
+      console.log('Hi 2' + temp)
 
       // Send Email To Mentor
       const mentorMail = {
@@ -164,26 +172,32 @@ export const paymobWebhookCheckout = catchAsync(
       }
       await new Email(menteeMail).sendBookConfirm()
 
+      // Stand at Queue
+      // populateQueue()
+
+      ///////////////////////////////////////////////////////////////////
       // Get Session Link From Nagy
 
       // Send Reminder Email
-      const reminderMentor = {
-        url: 'https://www.google.com/',
-        email: details[4]
-      }
-      const reminderMentee = {
-        url: 'https://www.google.com/',
-        email: details[5]
-      }
+      // const reminderMentor = {
+      //   url: 'https://www.google.com/',
+      //   email: details[4]
+      // }
+      // const reminderMentee = {
+      //   url: 'https://www.google.com/',
+      //   email: details[5]
+      // }
 
       // Extracting date and time
-      const [, month, day] = details[2].split('-')
-      const [hour, minute] = details[3].split(':')
+      // const [, month, day] = details[2].split('-')
+      // const [hour, minute] = details[3].split(':')
 
-      cron.schedule(`${minute} ${hour - 1} ${day} ${month} *`, async () => {
-        await new Email(reminderMentor).sendSessionReminder()
-        await new Email(reminderMentee).sendSessionReminder()
-      })
+      // cron.schedule(`${minute} ${hour - 1} ${day} ${month} *`, async () => {
+      //   await new Email(reminderMentor).sendSessionReminder()
+      //   await new Email(reminderMentee).sendSessionReminder()
+      // })
+
+      ///////////////////////////////////////////////////////////////////
 
       res.status(200).json({ received: true })
     } else {
