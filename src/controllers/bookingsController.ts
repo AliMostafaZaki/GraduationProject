@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express' // Import types for re
 import catchAsync from '../utils/catchAsync.js' // Import catchAsync function
 import AppError from '../utils/appError'
 import Email from '../utils/email'
-import populateQueue from '../utils/schedule'
+import Schedule from '../utils/schedule'
 
 export const getBookings = catchAsync(async (req: Request, res: Response) => {
   // Get ID Of Registered Mentor
@@ -167,7 +167,7 @@ export const paymobWebhookCheckout = catchAsync(
       await new Email(menteeMail).sendBookConfirm()
 
       // Stand at Queue
-      // populateQueue()
+      Schedule()
 
       ///////////////////////////////////////////////////////////////////
       // Get Session Link From Nagy

@@ -10,6 +10,7 @@ const availabilityModel_1 = __importDefault(require("../models/availabilityModel
 const catchAsync_js_1 = __importDefault(require("../utils/catchAsync.js")); // Import catchAsync function
 const appError_1 = __importDefault(require("../utils/appError"));
 const email_1 = __importDefault(require("../utils/email"));
+const schedule_1 = __importDefault(require("../utils/schedule"));
 exports.getBookings = (0, catchAsync_js_1.default)(async (req, res) => {
     // Get ID Of Registered Mentor
     const { userID } = req.body;
@@ -142,7 +143,7 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)(async (req, res) =>
         };
         await new email_1.default(menteeMail).sendBookConfirm();
         // Stand at Queue
-        // populateQueue()
+        (0, schedule_1.default)();
         ///////////////////////////////////////////////////////////////////
         // Get Session Link From Nagy
         // Send Reminder Email

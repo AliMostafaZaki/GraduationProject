@@ -9,7 +9,7 @@ const queueModel_1 = __importDefault(require("../models/queueModel"));
 const historyModel_1 = __importDefault(require("../models/historyModel"));
 let activeJob = false;
 async function populateQueue() {
-    while ((await queueModel_1.default.countDocuments()) < 3) {
+    while ((await queueModel_1.default.countDocuments()) < 10) {
         const booking = await bookingModel_1.default.findOne({}, { sort: { meetingTime: 1 } });
         if (booking && lessThanADayAway(booking.meetingTime)) {
             await enqueue(booking);
