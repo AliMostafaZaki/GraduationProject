@@ -10,8 +10,8 @@ const router = express.Router()
 
 router.route('/').post(setAvailability)
 
-router.route('/').get(getAvailability)
+router.route('/').post(getAvailability)
 
-router.route('/check').get(checkAvailability)
+router.route('/check').post(checkAvailability)
 
 export default router

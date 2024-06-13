@@ -44,7 +44,7 @@ export const paymobCheckoutSession = catchAsync(
     const apiKeyObj = { api_key: process.env.PAYMOB_API_KEY }
 
     const tokenRequest = await fetch(process.env.PAYMOB_TOKENS_URL, {
-      method: 'post',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(apiKeyObj)
     })

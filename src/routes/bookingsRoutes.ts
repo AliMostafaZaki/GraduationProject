@@ -6,8 +6,8 @@ import {
 
 const router = express.Router()
 
-router.route('/').get(getBookings)
+router.route('/').post(getBookings)
 
-router.get('/paymob-session', paymobCheckoutSession)
+router.post('/paymob-session', paymobCheckoutSession)
 
 export default router

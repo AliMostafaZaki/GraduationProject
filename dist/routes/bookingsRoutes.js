@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bookingsController_1 = require("../controllers/bookingsController");
 const router = express_1.default.Router();
-router.route('/').get(bookingsController_1.getBookings);
-router.get('/paymob-session', bookingsController_1.paymobCheckoutSession);
+router.route('/').post(bookingsController_1.getBookings);
+router.post('/paymob-session', bookingsController_1.paymobCheckoutSession);
 exports.default = router;
