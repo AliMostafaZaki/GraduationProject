@@ -44,17 +44,41 @@ async function dequeue() {
 async function handleBooking() {
   const dueMeeting = await dequeue()
 
-  // Call Reminder Notification Endpoint
+  // Get Room ID AND Prepare Session Link
+  const res = await fetch(`${process.env.RADWAN_URL}/createRoom`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  })
 
-  // Get Session Link From Nagy
+  const { roomId } = await res.json()
+
+  // Call Reminder Notification Endpoint FOR Mentor
+  await fetch(`${process.env.RADWAN_URL}/notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      receiverID: dueMeeting.mentorID,
+      message: `Your session is due in 1 hour. Your Room Id is ${roomId}`
+    })
+  })
+
+  // Call Reminder Notification Endpoint FOR Mentee
+  await fetch(`${process.env.RADWAN_URL}/notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      receiverID: dueMeeting.menteeID,
+      message: `Your session is due in 1 hour. Your Room Id is ${roomId}`
+    })
+  })
 
   // Send Reminder Email
   const reminderMentor = {
-    url: process.env.HostURL,
+    url: `${process.env.HOST_URL}/meeting/${roomId}`,
     email: dueMeeting.mentorEmail
   }
   const reminderMentee = {
-    url: process.env.HostURL,
+    url: `${process.env.HOST_URL}/meeting/${roomId}`,
     email: dueMeeting.menteeEmail
   }
 
@@ -89,9 +113,6 @@ function lessThanADayAway(givenTime: Date) {
 async function handleQueue() {
   const nextMeeting = await Queue.findOne().sort({ meetingTime: 1 }).exec()
   if (nextMeeting) {
-    console.log(nextMeeting)
-    console.log(new Date())
-
     if (validDate(nextMeeting.meetingTime)) {
       schedule.scheduleJob(nextMeeting.meetingTime, function () {
         handleBooking()

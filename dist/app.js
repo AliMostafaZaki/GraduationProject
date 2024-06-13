@@ -25,7 +25,7 @@ app.set('views', path_1.default.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5500',
+    origin: `${process.env.HOST_URL}`,
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
 }));
 app.options('*', (0, cors_1.default)());

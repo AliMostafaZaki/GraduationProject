@@ -144,6 +144,24 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)(async (req, res) =>
             price: object.amount_cents / 100
         };
         await new email_1.default(menteeMail).sendBookConfirm();
+        // Call Confirm Notification Endpoint FOR Mentor
+        await fetch(`${process.env.RADWAN_URL}/notify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                receiverID: details[0],
+                message: `Session Booked Successfully!`
+            })
+        });
+        // Call Confirm Notification Endpoint FOR Mentee
+        await fetch(`${process.env.RADWAN_URL}/notify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                receiverID: details[1],
+                message: `Session Booked Successfully!`
+            })
+        });
         // Stand at Queue
         (0, schedule_1.default)();
         // Call Confirm Notification Endpoint

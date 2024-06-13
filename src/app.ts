@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'))
 // Implement CORS
 app.use(
   cors({
-    origin: 'http://localhost:5500',
+    origin: `${process.env.HOST_URL}`,
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
   })
 )
