@@ -30,7 +30,12 @@ app.use(
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
   })
 )
-app.options('*', cors())
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
+
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.send()
+})
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')))

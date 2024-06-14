@@ -28,7 +28,11 @@ app.use((0, cors_1.default)({
     origin: `${process.env.HOST_URL}`,
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
 }));
-app.options('*', (0, cors_1.default)());
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.send();
+});
 // Serving static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 // Set security HTTP headers
