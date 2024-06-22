@@ -36,6 +36,21 @@ export const paymobCheckoutSession = catchAsync(
       req as any
     ).body
 
+    if (
+      !mentorID ||
+      !menteeID ||
+      !day ||
+      !timeslot ||
+      !mentorEmail ||
+      !menteeEmail
+    )
+      return next(
+        new AppError(
+          `mentorID, menteeID, day, timeslot, mentorEmail and menteeEmail Must be Included!`,
+          404
+        )
+      )
+
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await Availability.findOne({ mentorID: mentorID })
 

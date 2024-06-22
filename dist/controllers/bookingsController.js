@@ -29,6 +29,13 @@ exports.getBookings = (0, catchAsync_js_1.default)(async (req, res) => {
 exports.paymobCheckoutSession = (0, catchAsync_js_1.default)(async (req, res, next) => {
     // Get Session Details
     const { mentorID, menteeID, day, timeslot, mentorEmail, menteeEmail } = req.body;
+    if (!mentorID ||
+        !menteeID ||
+        !day ||
+        !timeslot ||
+        !mentorEmail ||
+        !menteeEmail)
+        return next(new appError_1.default(`mentorID, menteeID, day, timeslot, mentorEmail and menteeEmail Must be Included!`, 404));
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await availabilityModel_1.default.findOne({ mentorID: mentorID });
     // 2) Create paymob checkout session
