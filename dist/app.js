@@ -24,15 +24,25 @@ app.set('view engine', 'pug');
 app.set('views', path_1.default.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-app.use((0, cors_1.default)({
+// app.use(
+//   cors({
+//     origin: `${process.env.HOST_URL}`,
+//     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
+//   })
+// )
+// app.options('*', (req, res) => {
+//   res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+//   res.send()
+// })
+const corsOptions = {
     origin: `${process.env.HOST_URL}`,
-    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-}));
-app.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`);
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.send();
-});
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+app.use((0, cors_1.default)(corsOptions));
+app.options('*', (0, cors_1.default)(corsOptions));
 // Serving static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 // Set security HTTP headers

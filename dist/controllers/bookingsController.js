@@ -164,7 +164,15 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)(async (req, res) =>
         });
         // Stand at Queue
         (0, schedule_1.default)();
-        // Call Confirm Notification Endpoint
+        // Chat
+        await fetch(`${process.env.RADWAN_URL}/createChat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                mentorID: details[0],
+                menteeID: details[1]
+            })
+        });
         res.status(200).json({ received: true });
     }
     else {

@@ -192,6 +192,16 @@ export const paymobWebhookCheckout = catchAsync(
       // Stand at Queue
       Schedule()
 
+      // Chat
+      await fetch(`${process.env.RADWAN_URL}/createChat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mentorID: details[0],
+          menteeID: details[1]
+        })
+      })
+
       res.status(200).json({ received: true })
     } else {
       res.status(404).json({ received: false })
