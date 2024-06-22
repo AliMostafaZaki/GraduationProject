@@ -45,7 +45,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
-app.options('*', cors(corsOptions))
+// app.options('*', cors(corsOptions))
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')))

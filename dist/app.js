@@ -42,7 +42,7 @@ const corsOptions = {
     credentials: true
 };
 app.use((0, cors_1.default)(corsOptions));
-app.options('*', (0, cors_1.default)(corsOptions));
+// app.options('*', cors(corsOptions))
 // Serving static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 // Set security HTTP headers
