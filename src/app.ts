@@ -24,18 +24,28 @@ app.set('views', path.join(__dirname, 'views'))
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-app.use(
-  cors({
-    origin: `${process.env.HOST_URL}`,
-    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-  })
-)
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
+// app.use(
+//   cors({
+//     origin: `${process.env.HOST_URL}`,
+//     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
+//   })
+// )
+// app.options('*', (req, res) => {
+//   res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
 
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  res.send()
-})
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+//   res.send()
+// })
+
+const corsOptions = {
+  origin: `${process.env.HOST_URL}`,
+  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}
+app.use(cors(corsOptions))
+
+app.options('*', cors(corsOptions))
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')))

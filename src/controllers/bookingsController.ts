@@ -192,8 +192,6 @@ export const paymobWebhookCheckout = catchAsync(
       // Stand at Queue
       Schedule()
 
-      // Call Confirm Notification Endpoint
-
       res.status(200).json({ received: true })
     } else {
       res.status(404).json({ received: false })
