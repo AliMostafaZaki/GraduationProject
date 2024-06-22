@@ -56,10 +56,18 @@ export const checkAvailability = catchAsync(
     const { mentorID } = (req as any).body
 
     // Get Mentor Availability
-    const { availability, sessionPrice } = await Availability.findOne(
+    const available = await Availability.findOne(
       { mentorID: mentorID },
       { availability: 1, sessionPrice: 1, _id: 0 }
     ).lean()
+
+    if (!available) {
+      return res.status(404).json({
+        code: 404,
+        message: "The mentor doesn't have time slots available yet!"
+      })
+    }
+    const { availability, sessionPrice } = available
 
     // Get Mentor Bookings
     const now = new Date()

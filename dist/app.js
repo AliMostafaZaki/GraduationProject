@@ -44,7 +44,6 @@ const index_1 = __importDefault(require("./routes/index"));
 const bookingsController_1 = require("./controllers/bookingsController");
 // Start express app
 const app = (0, express_1.default)();
-console.log(process.env.HOST_URL);
 const corsOptions = {
     origin: `${process.env.HOST_URL}`,
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],

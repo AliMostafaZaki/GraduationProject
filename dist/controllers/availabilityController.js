@@ -40,7 +40,14 @@ exports.checkAvailability = (0, catchAsync_js_1.default)(async (req, res) => {
     // Get ID Of Mentor
     const { mentorID } = req.body;
     // Get Mentor Availability
-    const { availability, sessionPrice } = await availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 }).lean();
+    const available = await availabilityModel_1.default.findOne({ mentorID: mentorID }, { availability: 1, sessionPrice: 1, _id: 0 }).lean();
+    if (!available) {
+        return res.status(404).json({
+            code: 404,
+            message: "The mentor doesn't have time slots available yet!"
+        });
+    }
+    const { availability, sessionPrice } = available;
     // Get Mentor Bookings
     const now = new Date();
     const nowDay = now.toISOString().split('T')[0];

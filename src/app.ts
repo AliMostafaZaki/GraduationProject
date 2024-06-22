@@ -19,7 +19,6 @@ import { paymobWebhookCheckout } from './controllers/bookingsController'
 // Start express app
 const app = express()
 
-console.log(process.env.HOST_URL)
 const corsOptions = {
   origin: `${process.env.HOST_URL}`,
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
