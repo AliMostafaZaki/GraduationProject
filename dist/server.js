@@ -15,7 +15,7 @@ process.on('uncaughtException', (err) => {
     console.log(err.name, err.message);
     process.exit(1);
 });
-dotenv_1.default.config({ path: './config.env' });
+dotenv_1.default.config({ path: './.env' });
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 mongoose_1.default.connect(DB).then(() => console.log('connected to database'));
 const port = parseInt(process.env.PORT) || 3000;

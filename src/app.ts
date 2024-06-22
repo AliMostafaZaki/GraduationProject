@@ -8,6 +8,8 @@ import hpp from 'hpp'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import cors from 'cors'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 import AppError from './utils/appError'
 import globalErrorHandler from './controllers/errorController'
@@ -16,6 +18,15 @@ import { paymobWebhookCheckout } from './controllers/bookingsController'
 
 // Start express app
 const app = express()
+
+console.log(process.env.HOST_URL)
+const corsOptions = {
+  origin: `${process.env.HOST_URL}`,
+  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}
+app.use(cors(corsOptions))
 
 app.enable('trust proxy')
 
@@ -36,14 +47,6 @@ app.set('views', path.join(__dirname, 'views'))
 //   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
 //   res.send()
 // })
-
-const corsOptions = {
-  origin: `${process.env.HOST_URL}`,
-  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}
-app.use(cors(corsOptions))
 
 // app.options('*', cors(corsOptions))
 
@@ -82,18 +85,7 @@ app.use(cookieParser())
 app.use(mongoSanitize())
 
 // Prevent parameter pollution
-app.use(
-  hpp({
-    whitelist: [
-      'duration',
-      'ratingsQuantity',
-      'ratingsAverage',
-      'maxGroupSize',
-      'difficulty',
-      'price'
-    ]
-  })
-)
+app.use(hpp())
 
 // compress all responses
 app.use(compression())
