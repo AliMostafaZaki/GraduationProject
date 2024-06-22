@@ -28,6 +28,14 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PATCH,PUT')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.sendStatus(200)
+})
+
 app.enable('trust proxy')
 
 app.set('view engine', 'pug')
