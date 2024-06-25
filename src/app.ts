@@ -19,22 +19,6 @@ import { paymobWebhookCheckout } from './controllers/bookingsController'
 // Start express app
 const app = express()
 
-const corsOptions = {
-  origin: `${process.env.HOST_URL}`,
-  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}
-app.use(cors(corsOptions))
-
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
-  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PATCH,PUT')
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  res.header('Access-Control-Allow-Credentials', 'true')
-  res.sendStatus(200)
-})
-
 app.enable('trust proxy')
 
 app.set('view engine', 'pug')
@@ -42,20 +26,27 @@ app.set('views', path.join(__dirname, 'views'))
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-// app.use(
-//   cors({
-//     origin: `${process.env.HOST_URL}`,
-//     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-//   })
-// )
-// app.options('*', (req, res) => {
-//   res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
+const corsOptions = {
+  origin: [
+    `${process.env.HOST_URL}`,
+    'http://localhost:5500',
+    'https://www.mentor.my.to',
+    'https://mentor.my.to'
+  ],
+  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}
 
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-//   res.send()
-// })
+app.use(cors(corsOptions))
 
-// app.options('*', cors(corsOptions))
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin)
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PATCH,PUT')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.sendStatus(200)
+})
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')))
