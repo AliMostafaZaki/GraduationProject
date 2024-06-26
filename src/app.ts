@@ -27,7 +27,11 @@ app.set('views', path.join(__dirname, 'views'))
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
 const corsOptions = {
-  origin: [`${process.env.HOST_URL}`, 'http://localhost:5500', 'https://mentor.my.to'],
+  origin: [
+    `${process.env.HOST_URL}`,
+    'http://localhost:5500',
+    'https://mentor.my.to'
+  ],
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
