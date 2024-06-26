@@ -44,36 +44,29 @@ const index_1 = __importDefault(require("./routes/index"));
 const bookingsController_1 = require("./controllers/bookingsController");
 // Start express app
 const app = (0, express_1.default)();
+app.enable('trust proxy');
+app.set('view engine', 'pug');
+app.set('views', path_1.default.join(__dirname, 'views'));
+// 1) GLOBAL MIDDLEWARES
+// Implement CORS
 const corsOptions = {
-    origin: `${process.env.HOST_URL}`,
+    origin: [
+        `${process.env.HOST_URL}`,
+        'http://localhost:5500',
+        'https://mentor.my.to'
+    ],
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
 app.use((0, cors_1.default)(corsOptions));
 app.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PATCH,PUT');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.sendStatus(200);
 });
-app.enable('trust proxy');
-app.set('view engine', 'pug');
-app.set('views', path_1.default.join(__dirname, 'views'));
-// 1) GLOBAL MIDDLEWARES
-// Implement CORS
-// app.use(
-//   cors({
-//     origin: `${process.env.HOST_URL}`,
-//     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-//   })
-// )
-// app.options('*', (req, res) => {
-//   res.header('Access-Control-Allow-Origin', `${process.env.HOST_URL}`)
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-//   res.send()
-// })
 // app.options('*', cors(corsOptions))
 // Serving static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
