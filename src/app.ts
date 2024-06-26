@@ -30,7 +30,6 @@ const corsOptions = {
   origin: [
     `${process.env.HOST_URL}`,
     'http://localhost:5500',
-    'https://www.mentor.my.to',
     'https://mentor.my.to'
   ],
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
@@ -47,6 +46,8 @@ app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Credentials', 'true')
   res.sendStatus(200)
 })
+
+// app.options('*', cors(corsOptions))
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')))
