@@ -54,8 +54,6 @@ export const paymobCheckoutSession = catchAsync(
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await Availability.findOne({ mentorID: mentorID })
 
-    console.log('sessionPrice' + sessionPrice)
-
     // 2) Create paymob checkout session
     // ## 1) Authentication Request
     const apiKeyObj = { api_key: process.env.PAYMOB_API_KEY }
@@ -85,15 +83,11 @@ export const paymobCheckoutSession = catchAsync(
       ]
     }
 
-    console.log('orderObj' + orderObj)
-
     const orderRequest = await fetch(process.env.PAYMOB_ORDERS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderObj)
     })
-
-    console.log('orderRequest' + orderRequest)
 
     const { id } = await orderRequest.json()
     if (!id) return next(new AppError(`Order Registration Failed!`, 404))
@@ -131,8 +125,6 @@ export const paymobCheckoutSession = catchAsync(
 
     const response = await paymentKeyRequest.json()
 
-    console.log('response' + response)
-
     const paymentKeyToken = response.token
     if (!paymentKeyToken)
       return next(new AppError(`Create Payment Key Failed!`, 404))
@@ -152,8 +144,6 @@ export const paymobWebhookCheckout = catchAsync(
     const stringData = bufferData.toString('utf-8') // Convert Buffer to string using appropriate encoding (utf-8 in this case)
     const parsedData = JSON.parse(stringData) // Parse the JSON string back to a JavaScript object
     const object = parsedData.obj // Parse the string as JSON
-
-    console.log(stringData)
 
     if (object.success) {
       // Session Data from Paymob Req

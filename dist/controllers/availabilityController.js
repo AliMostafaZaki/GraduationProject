@@ -9,15 +9,18 @@ const bookingModel_1 = __importDefault(require("../models/bookingModel"));
 const catchAsync_js_1 = __importDefault(require("../utils/catchAsync.js")); // Import catchAsync function
 exports.setAvailability = (0, catchAsync_js_1.default)(async (req, res) => {
     // Get ID Of Registered Mentor
-    const { mentorID } = req.body;
+    const { mentorID, availability, sessionPrice } = req.body;
     // Check If Mentor Has Availability Slots Or Not
     const exist = await availabilityModel_1.default.findOne({ mentorID: mentorID });
-    // If Mentor Has Not Availability Slots Then Create New One
+    // If Mentor Has Not Availability Slots Then Create New One OR Update Old One
     if (!exist)
-        await availabilityModel_1.default.create({ mentorID: mentorID });
-    // Update Availability Slots
-    const { availability, sessionPrice } = req.body;
-    await availabilityModel_1.default.findOneAndUpdate({ mentorID: mentorID }, { availability: availability, sessionPrice: sessionPrice }, { runValidators: true });
+        await availabilityModel_1.default.create({
+            mentorID: mentorID,
+            availability: availability,
+            sessionPrice: sessionPrice
+        });
+    else
+        await availabilityModel_1.default.findOneAndUpdate({ mentorID: mentorID }, { availability: availability, sessionPrice: sessionPrice }, { runValidators: true });
     res.status(200).json({
         status: 'success'
     });

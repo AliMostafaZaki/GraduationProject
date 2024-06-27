@@ -6,21 +6,24 @@ import catchAsync from '../utils/catchAsync.js' // Import catchAsync function
 export const setAvailability = catchAsync(
   async (req: Request, res: Response) => {
     // Get ID Of Registered Mentor
-    const { mentorID } = (req as any).body
+    const { mentorID, availability, sessionPrice } = (req as any).body
 
     // Check If Mentor Has Availability Slots Or Not
     const exist = await Availability.findOne({ mentorID: mentorID })
 
-    // If Mentor Has Not Availability Slots Then Create New One
-    if (!exist) await Availability.create({ mentorID: mentorID })
-
-    // Update Availability Slots
-    const { availability, sessionPrice } = (req as any).body
-    await Availability.findOneAndUpdate(
-      { mentorID: mentorID },
-      { availability: availability, sessionPrice: sessionPrice },
-      { runValidators: true }
-    )
+    // If Mentor Has Not Availability Slots Then Create New One OR Update Old One
+    if (!exist)
+      await Availability.create({
+        mentorID: mentorID,
+        availability: availability,
+        sessionPrice: sessionPrice
+      })
+    else
+      await Availability.findOneAndUpdate(
+        { mentorID: mentorID },
+        { availability: availability, sessionPrice: sessionPrice },
+        { runValidators: true }
+      )
 
     res.status(200).json({
       status: 'success'

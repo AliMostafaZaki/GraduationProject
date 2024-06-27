@@ -38,7 +38,6 @@ exports.paymobCheckoutSession = (0, catchAsync_js_1.default)(async (req, res, ne
         return next(new appError_1.default(`mentorID, menteeID, day, timeslot, mentorEmail and menteeEmail Must be Included!`, 404));
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await availabilityModel_1.default.findOne({ mentorID: mentorID });
-    console.log('sessionPrice' + sessionPrice);
     // 2) Create paymob checkout session
     // ## 1) Authentication Request
     const apiKeyObj = { api_key: process.env.PAYMOB_API_KEY };
@@ -65,13 +64,11 @@ exports.paymobCheckoutSession = (0, catchAsync_js_1.default)(async (req, res, ne
             }
         ]
     };
-    console.log('orderObj' + orderObj);
     const orderRequest = await fetch(process.env.PAYMOB_ORDERS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderObj)
     });
-    console.log('orderRequest' + orderRequest);
     const { id } = await orderRequest.json();
     if (!id)
         return next(new appError_1.default(`Order Registration Failed!`, 404));
@@ -105,7 +102,6 @@ exports.paymobCheckoutSession = (0, catchAsync_js_1.default)(async (req, res, ne
         body: JSON.stringify(paymentKeyObj)
     });
     const response = await paymentKeyRequest.json();
-    console.log('response' + response);
     const paymentKeyToken = response.token;
     if (!paymentKeyToken)
         return next(new appError_1.default(`Create Payment Key Failed!`, 404));
@@ -121,7 +117,6 @@ exports.paymobWebhookCheckout = (0, catchAsync_js_1.default)(async (req, res) =>
     const stringData = bufferData.toString('utf-8'); // Convert Buffer to string using appropriate encoding (utf-8 in this case)
     const parsedData = JSON.parse(stringData); // Parse the JSON string back to a JavaScript object
     const object = parsedData.obj; // Parse the string as JSON
-    console.log(stringData);
     if (object.success) {
         // Session Data from Paymob Req
         const details = object.order.items[0].name.split('#');
