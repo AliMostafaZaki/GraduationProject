@@ -8,9 +8,9 @@ import {
 
 const router = express.Router()
 
-router.route('/').post(setAvailability)
+router.route('/set').post(setAvailability)
 
-router.route('/').post(getAvailability)
+router.route('/get').post(getAvailability)
 
 router.route('/check').post(checkAvailability)
 
