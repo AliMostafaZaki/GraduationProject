@@ -51,6 +51,8 @@ export const paymobCheckoutSession = catchAsync(
         )
       )
 
+    console.log(mentorID, menteeID, day, timeslot, mentorEmail, menteeEmail)
+
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await Availability.findOne({ mentorID: mentorID })
 

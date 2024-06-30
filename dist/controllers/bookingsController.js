@@ -36,6 +36,7 @@ exports.paymobCheckoutSession = (0, catchAsync_js_1.default)(async (req, res, ne
         !mentorEmail ||
         !menteeEmail)
         return next(new appError_1.default(`mentorID, menteeID, day, timeslot, mentorEmail and menteeEmail Must be Included!`, 404));
+    console.log(mentorID, menteeID, day, timeslot, mentorEmail, menteeEmail);
     // 1) Get Session Price depend on mentorID
     const { sessionPrice } = await availabilityModel_1.default.findOne({ mentorID: mentorID });
     // 2) Create paymob checkout session
