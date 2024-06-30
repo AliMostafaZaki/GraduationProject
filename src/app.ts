@@ -76,8 +76,8 @@ app.post(
 )
 
 // Body parser, reading data from body into req.body
-// app.use(express.json({ limit: '1000kb' }))
-// app.use(express.urlencoded({ extended: true, limit: '1000kb' }))
+app.use(express.json({ limit: '10000kb' }))
+app.use(express.urlencoded({ extended: true, limit: '10000kb' }))
 app.use(cookieParser())
 
 // Data sanitization against NoSQL query injection

@@ -86,8 +86,8 @@ if (process.env.NODE_ENV === 'development') {
 // PAYMOB Checkout webhook
 app.post('/paymob-webhook', express_1.default.raw({ type: 'application/json' }), bookingsController_1.paymobWebhookCheckout);
 // Body parser, reading data from body into req.body
-// app.use(express.json({ limit: '1000kb' }))
-// app.use(express.urlencoded({ extended: true, limit: '1000kb' }))
+app.use(express_1.default.json({ limit: '10000kb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '10000kb' }));
 app.use((0, cookie_parser_1.default)());
 // Data sanitization against NoSQL query injection
 app.use((0, express_mongo_sanitize_1.default)());
